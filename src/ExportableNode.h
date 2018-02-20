@@ -13,8 +13,12 @@ public:
 
 	GLTF::Node glNode;
 
+	void sample();
+
 private:
 	std::unique_ptr<ExportableMesh> m_mesh;
+
+	MObject m_obj;
 
 	GLTF::Node::TransformMatrix m_matrix;
 

@@ -212,6 +212,27 @@ void ExportableAsset::save()
 	}
 }
 
+void ExportableAsset::sampleAnimations() {
+	unsigned int start = 0, end = 100;
+	MTime current = MAnimControl::currentTime();
+	bool playing = MAnimControl::isPlaying();
+	if (playing) {
+		MAnimControl::stop();
+	}
+	for (unsigned int time = 0; time <= end; ++time) {
+		MGlobal::viewFrame(time);
+		std::cout << "Frame " << time << std::endl;
+		for (std::unique_ptr<ExportableItem>& ei : m_items) {
+			ei.get()->sample();
+		}
+	}
+	MGlobal::viewFrame(current);
+	MAnimControl::setCurrentTime(current);
+	if (playing) {
+		MAnimControl::playForward();
+	}
+}
+
 void ExportableAsset::create(std::ofstream& file, const std::string& path, const std::ios_base::openmode mode)
 {
 	file.open(path, mode);

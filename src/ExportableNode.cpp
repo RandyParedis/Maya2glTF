@@ -1,11 +1,11 @@
-#include "externals.h"
+﻿#include "externals.h"
 #include "ExportableNode.h"
 #include "MayaException.h"
 #include "ExportableResources.h"
 #include "Arguments.h"
 
 ExportableNode::ExportableNode(MDagPath dagPath, ExportableResources& resources)
-	: ExportableObject(dagPath.node())
+	: ExportableObject(dagPath.node()), m_obj(dagPath.node())
 {
 	MStatus status;
 
@@ -46,6 +46,45 @@ ExportableNode::ExportableNode(MDagPath dagPath, ExportableResources& resources)
 
 ExportableNode::~ExportableNode()
 {
+}
+
+void ExportableNode::sample() {
+	MFnDependencyNode fnDependNode{ m_obj };
+
+	/// TRANSFORMATIONS
+	// Translation
+	MPlug txPlug{ m_obj, fnDependNode.attribute("translateX") };
+	double tx = txPlug.asDouble();
+
+	MPlug tyPlug{ m_obj, fnDependNode.attribute("translateY") };
+	double ty = tyPlug.asDouble();
+
+	MPlug tzPlug{ m_obj, fnDependNode.attribute("translateZ") };
+	double tz = tzPlug.asDouble();
+
+	// Rotation
+	MPlug rxPlug{ m_obj, fnDependNode.attribute("rotateX") };
+	double rx = rxPlug.asDouble();
+
+	MPlug ryPlug{ m_obj, fnDependNode.attribute("rotateY") };
+	double ry = ryPlug.asDouble();
+
+	MPlug rzPlug{ m_obj, fnDependNode.attribute("rotateZ") };
+	double rz = rzPlug.asDouble();
+
+	// Scaling
+	MPlug sxPlug{ m_obj, fnDependNode.attribute("scaleX") };
+	double sx = sxPlug.asDouble();
+
+	MPlug syPlug{ m_obj, fnDependNode.attribute("scaleY") };
+	double sy = syPlug.asDouble();
+
+	MPlug szPlug{ m_obj, fnDependNode.attribute("scaleZ") };
+	double sz = szPlug.asDouble();
+
+	std::cout << "Translation [X, Y, Z]: " << tx << ", " << ty << ", " << tz << std::endl;
+	std::cout << "Rotation    [X, Y, Z]: " << radtodeg(rx) << "°, " << radtodeg(ry) << "°, " << radtodeg(rz) << "°\n";
+	std::cout << "Scaling     [X, Y, Z]: " << sx << ", " << sy << ", " << sz << std::endl;
 }
 
 std::unique_ptr<ExportableNode> ExportableNode::from(MDagPath dagPath, ExportableResources& usedShaderNames)

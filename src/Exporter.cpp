@@ -64,6 +64,6 @@ bool Exporter::hasSyntax() const
 void Exporter::exportScene(const Arguments& args)
 {
 	ExportableAsset exportableAsset(args);
-
+	exportableAsset.sampleAnimations();
 	exportableAsset.save();
 }

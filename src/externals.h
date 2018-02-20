@@ -92,3 +92,15 @@
 #include <maya/MFnBlinnShader.h>
 #include <maya/MUuid.h>
 #include <maya/MImage.h>
+
+#include <maya/MAnimControl.h>
+#include <maya/MTime.h>
+#include <maya/MGlobal.h>
+
+#ifndef degtorad
+inline double degtorad(double degrees) { return degrees * M_PI / 180.0f; }
+#endif
+
+#ifndef radtodeg
+inline double radtodeg(double radians) { return radians * 180.0f / M_PI; }
+#endif

@@ -11,6 +11,7 @@ public:
 	const std::string& prettyJsonString() const;
 
 	void save();
+	void sampleAnimations();
 
 private:
 	GLTF::Asset m_glAsset;
