@@ -48,43 +48,62 @@ ExportableNode::~ExportableNode()
 {
 }
 
-void ExportableNode::sample() {
+void ExportableNode::sample(Animation* animation) {
 	MFnDependencyNode fnDependNode{ m_obj };
 
 	/// TRANSFORMATIONS
-	// Translation
-	MPlug txPlug{ m_obj, fnDependNode.attribute("translateX") };
-	double tx = txPlug.asDouble();
+	double tx, ty, tz, rx, ry, rz, sx, sy, sz;
+	{
+		// Translation
+		MPlug txPlug{ m_obj, fnDependNode.attribute("translateX") };
+		tx = txPlug.asDouble();
 
-	MPlug tyPlug{ m_obj, fnDependNode.attribute("translateY") };
-	double ty = tyPlug.asDouble();
+		MPlug tyPlug{ m_obj, fnDependNode.attribute("translateY") };
+		ty = tyPlug.asDouble();
 
-	MPlug tzPlug{ m_obj, fnDependNode.attribute("translateZ") };
-	double tz = tzPlug.asDouble();
+		MPlug tzPlug{ m_obj, fnDependNode.attribute("translateZ") };
+		tz = tzPlug.asDouble();
 
-	// Rotation
-	MPlug rxPlug{ m_obj, fnDependNode.attribute("rotateX") };
-	double rx = rxPlug.asDouble();
+		// Rotation
+		MPlug rxPlug{ m_obj, fnDependNode.attribute("rotateX") };
+		rx = rxPlug.asDouble();
 
-	MPlug ryPlug{ m_obj, fnDependNode.attribute("rotateY") };
-	double ry = ryPlug.asDouble();
+		MPlug ryPlug{ m_obj, fnDependNode.attribute("rotateY") };
+		ry = ryPlug.asDouble();
 
-	MPlug rzPlug{ m_obj, fnDependNode.attribute("rotateZ") };
-	double rz = rzPlug.asDouble();
+		MPlug rzPlug{ m_obj, fnDependNode.attribute("rotateZ") };
+		rz = rzPlug.asDouble();
 
-	// Scaling
-	MPlug sxPlug{ m_obj, fnDependNode.attribute("scaleX") };
-	double sx = sxPlug.asDouble();
+		// Scaling
+		MPlug sxPlug{ m_obj, fnDependNode.attribute("scaleX") };
+		sx = sxPlug.asDouble();
 
-	MPlug syPlug{ m_obj, fnDependNode.attribute("scaleY") };
-	double sy = syPlug.asDouble();
+		MPlug syPlug{ m_obj, fnDependNode.attribute("scaleY") };
+		sy = syPlug.asDouble();
 
-	MPlug szPlug{ m_obj, fnDependNode.attribute("scaleZ") };
-	double sz = szPlug.asDouble();
+		MPlug szPlug{ m_obj, fnDependNode.attribute("scaleZ") };
+		sz = szPlug.asDouble();
 
-	std::cout << "Translation [X, Y, Z]: " << tx << ", " << ty << ", " << tz << std::endl;
-	std::cout << "Rotation    [X, Y, Z]: " << radtodeg(rx) << "°, " << radtodeg(ry) << "°, " << radtodeg(rz) << "°\n";
-	std::cout << "Scaling     [X, Y, Z]: " << sx << ", " << sy << ", " << sz << std::endl;
+		/*std::cout << "Translation [X, Y, Z]: " << tx << ", " << ty << ", " << tz << std::endl;
+		std::cout << "Rotation    [X, Y, Z]: " << radtodeg(rx) << "°, " << radtodeg(ry) << "°, " << radtodeg(rz) << "°\n";
+		std::cout << "Scaling     [X, Y, Z]: " << sx << ", " << sy << ", " << sz << std::endl;*/
+	}
+
+	/// Matrix
+	GLTF::Node::TransformTRS trs_matrix{};
+
+	// Translate
+	trs_matrix.translation[0] = (float)tx;
+	trs_matrix.translation[1] = (float)ty;
+	trs_matrix.translation[2] = (float)tz;
+
+	// Rotate
+	// ???
+
+	// Scale
+	trs_matrix.scale[0] = (float)sx;
+	trs_matrix.scale[1] = (float)sy;
+	trs_matrix.scale[2] = (float)sz;
 }
 
 std::unique_ptr<ExportableNode> ExportableNode::from(MDagPath dagPath, ExportableResources& usedShaderNames)

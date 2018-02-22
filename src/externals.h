@@ -36,6 +36,7 @@
 #include <GLTFBuffer.h>
 #include <GLTFBufferView.h>
 #include <GLTFAccessor.h>
+#include <GLTFAnimation.h>
 #include <GLTFMesh.h>
 #include <GLTFPrimitive.h>
 

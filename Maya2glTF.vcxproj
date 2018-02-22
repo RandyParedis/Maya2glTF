@@ -367,6 +367,9 @@ if errorlevel 1 (exit /b 100)
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Animation.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Maya2018-Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\color.cpp" />
     <ClCompile Include="src\ExportableObject.cpp" />
     <ClCompile Include="src\ExportableTexture.cpp" />
@@ -415,6 +418,9 @@ if errorlevel 1 (exit /b 100)
     <None Include="mel\test-iteration.mel" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Maya2018-Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="src\color.h" />
     <ClInclude Include="src\ExportableObject.h" />
     <ClInclude Include="src\ExportableTexture.h" />

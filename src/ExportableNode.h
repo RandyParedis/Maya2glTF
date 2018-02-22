@@ -13,7 +13,7 @@ public:
 
 	GLTF::Node glNode;
 
-	void sample();
+	void sample(Animation*);
 
 private:
 	std::unique_ptr<ExportableMesh> m_mesh;

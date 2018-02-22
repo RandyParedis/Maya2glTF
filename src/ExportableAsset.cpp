@@ -4,6 +4,7 @@
 #include "ExportableNode.h"
 #include "MayaException.h"
 #include "version.h"
+#include "Animation.h"
 
 ExportableAsset::ExportableAsset(const Arguments& args)
 	: m_resources(args)
@@ -219,15 +220,17 @@ void ExportableAsset::sampleAnimations() {
 	if (playing) {
 		MAnimControl::stop();
 	}
+	Animation animation{0, end+1};
 	for (unsigned int time = 0; time <= end; ++time) {
 		MGlobal::viewFrame(time);
-		std::cout << "Frame " << time << std::endl;
 		for (std::unique_ptr<ExportableItem>& ei : m_items) {
-			ei.get()->sample();
+			ei.get()->sample(&animation);
 		}
 	}
+	// Reset view to original
 	MGlobal::viewFrame(current);
 	MAnimControl::setCurrentTime(current);
+	m_glAsset.animations = animation.get();
 	if (playing) {
 		MAnimControl::playForward();
 	}
