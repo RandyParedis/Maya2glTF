@@ -89,8 +89,49 @@ void ExportableNode::sample(Animation* animation) {
 		std::cout << "Scaling     [X, Y, Z]: " << sx << ", " << sy << ", " << sz << std::endl;*/
 	}
 
-	/// Matrix
-	GLTF::Node::TransformTRS trs_matrix{};
+	/// STORE
+	float* translation, *rotation, *scale;
+
+	translation = new float[3];
+	translation[0] = tx;
+	translation[1] = ty;
+	translation[2] = tz;
+	animation->writeResult(AniPath::TRANSLATION, translation, &glNode);
+
+	rotation = new float[4];
+	//animation->writeResult(AniPath::ROTATION, rotation, &glNode);
+	GLTF::Node::TransformMatrix rotX{
+		1,        0,         0, 0,
+		0, cosf(rx), -sinf(rx), 0,
+		0, sinf(rx),  cosf(rx), 0,
+		0,        0,         0, 1
+	};
+	GLTF::Node::TransformMatrix rotY{
+		 cosf(ry), 0, sinf(ry), 0,
+		        0, 1,        0, 0,
+		-sinf(ry), 0, cosf(ry), 0,
+		        0, 0,        0, 1
+	};
+	GLTF::Node::TransformMatrix rotZ{
+		cosf(rz), -sinf(rz), 0, 0,
+		sinf(rz),  cosf(rz), 0, 0,
+		       0,         0, 1, 0,
+			   0,         0, 0, 1
+	};
+	rotX.premultiply(&rotY);
+	rotX.premultiply(&rotZ);
+	GLTF::Node::TransformTRS* rotTRS = rotX.getTransformTRS();
+	animation->writeResult(AniPath::ROTATION, rotTRS->rotation, &glNode);
+	delete rotTRS;
+
+	scale = new float[3];
+	scale[0] = sx;
+	scale[1] = sy;
+	scale[2] = sz;
+	animation->writeResult(AniPath::SCALE, scale, &glNode);
+
+	/// MATRIX
+	/*GLTF::Node::TransformTRS trs_matrix{};
 
 	// Translate
 	trs_matrix.translation[0] = (float)tx;
@@ -103,7 +144,7 @@ void ExportableNode::sample(Animation* animation) {
 	// Scale
 	trs_matrix.scale[0] = (float)sx;
 	trs_matrix.scale[1] = (float)sy;
-	trs_matrix.scale[2] = (float)sz;
+	trs_matrix.scale[2] = (float)sz;*/
 }
 
 std::unique_ptr<ExportableNode> ExportableNode::from(MDagPath dagPath, ExportableResources& usedShaderNames)

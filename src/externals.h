@@ -24,6 +24,7 @@
 #include <bitset>
 #include <numeric>
 #include <cmath>
+#include <math.h>
 #include <valarray>
 #include <fstream>
 

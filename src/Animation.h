@@ -9,7 +9,7 @@ public:
 		LINEAR, STEP, CATMULLROMSPLINE, CUBICSPLINE
 	};
 
-	Animation(int nodeid, unsigned int size);
+	Animation(unsigned int size, const float& fps=24);
 	~Animation();
 
 	inline std::vector<GLTF::Animation*> get() const {
@@ -17,11 +17,15 @@ public:
 	};
 
 	void setFrame(const unsigned int& inputframe);
-	void writeResult(const AniPath path, float* data);
+	static bool isIdentity(float* data, const AniPath path);
+	void writeResult(const AniPath path, float* data, GLTF::Node*);
 
 private:
 	std::vector<GLTF::Animation*> m_animations;
 
 	unsigned int m_size;
 	unsigned int m_cur_frame;
+	float m_fps;
+
+	GLTF::Animation::Channel* createChannel(const AniPath& type, GLTF::Node* node, float* data);
 };

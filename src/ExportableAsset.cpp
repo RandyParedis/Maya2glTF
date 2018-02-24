@@ -102,6 +102,7 @@ void ExportableAsset::save()
 	options.name = args.sceneName.asChar();
 	options.binary = args.glb;
 
+	m_glAsset.mergeAnimations();
 	m_glAsset.writeJSON(&jsonWriter, &options);
 	jsonWriter.EndObject();
 
@@ -156,7 +157,7 @@ void ExportableAsset::save()
 		const auto& jsonString = m_rawJsonString;
 
 		std::ofstream file;
-		create(file, outputPath.string(), ios::out | (args.glb ? ios::binary : ios::app));
+		create(file, outputPath.string(), ios::out | (args.glb ? ios::binary : 0));
 
 		if (args.glb)
 		{
@@ -215,14 +216,16 @@ void ExportableAsset::save()
 
 void ExportableAsset::sampleAnimations() {
 	unsigned int start = 0, end = 100;
+	float fps = 24;
 	MTime current = MAnimControl::currentTime();
 	bool playing = MAnimControl::isPlaying();
 	if (playing) {
 		MAnimControl::stop();
 	}
-	Animation animation{0, end+1};
+	Animation animation{end+1, fps};
 	for (unsigned int time = 0; time <= end; ++time) {
 		MGlobal::viewFrame(time);
+		animation.setFrame(time);
 		for (std::unique_ptr<ExportableItem>& ei : m_items) {
 			ei.get()->sample(&animation);
 		}
